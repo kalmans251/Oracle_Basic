@@ -35,6 +35,8 @@ select *
 from employee
 where commission in (300,500,1400);
 
+select *
+from employee;
 -- Between A and B    : A와 B 사이의 값을 출력
 -- 입사월이 81년 1월 1일부터 81년 12월 31일 까지
 
@@ -252,4 +254,267 @@ from employee;
 --RPAD
 select salary,RPAD (salary,10,'*') -- salary 컬럼의 값을 10자리로 표현 비어있는 공백(오른쪽에 리터럴 위치)
 from employee;
+
+--TRIM : 앞뒤의 공백을 제거
+select '      Oracle mania     ' as 원본
+, trim ('      Oracle mania     ') as 공백제거
+from dual;
+
+--1.덧셈 연산자를 사용하여 모든 사원에 대해서 $300의 급여 인상ㅇ을 계산한 후 사원이름, 급여 ,인상된 급여를 출력하세요.
+select ename 사원이름,salary 급여, salary+300 "인상된 급여"
+from employee;
+
+--2.사원의 이름,급여,연간 총 수입이 많은 것 부터 작은순으로 출력 하시오. 연간 총 수입은 월급에 12를 곱한 후 $100의 상여금을 더해서 계산 하시오.
+select ename 사원이름,salary 급여, salary*12+100 "연간 총 수입"
+from employee
+order by (salary*12+100) desc;
+
+--3. 급여가 2000을 넘는 사원의 이름과 급여를 급여가 많은 것 부터 작은 순으로 출력하세요.
+select ename 사원이름,salary 급여
+from employee;
+
+--4.사원 번호가 7788인 사원의 이름과 부서번호를 출력하세요.
+select ename 사원이름,dno 부서번호
+from employee
+where eno = 7788;
+
+--5.급여가 2000에서 3000사이에 포함되지 않는 사원의 이름과 급여를 출력하세요.
+select ename 사원이름,salary 급여
+from employee
+where salary < 2000 or salary > 3000;
+
+--6.1981년 2월 20일부터 81년 5월 1일 사이에 입사한 사원의 이름 담당업무,입사일을 출력하시오
+select ename 사원이름,job 담당업무,hiredate 입사일
+from employee
+where hiredate between '81/02/20' and '81/05/01';
+
+--7.부서번호가 20및 30에 속한 사원의 이름과 ㅜㅂ서번호를 출력하되 이름을 기준(내림차순)으로 출력하시오.
+select ename 사원이름,dno 부서번호
+from employee
+where dno between 20 and 30
+order by ename desc;
+
+--8.사원의 급여가 2000에서 3000사이에 포함되고 부서번호가 20또는 30인 사원의 이름, 급여와 부서번호를 출력하되 이름을 오름차순으로 출력하세요.
+select ename 사원이름,salary 급여,dno 부서번호
+from employee
+where salary between 2000 and 3000
+order by ename asc;
+
+--9.181년도 입사한 사원의 이름과 입사일을 출력하시오(like연산자와 와일드 카드 사용:_,%)
+select ename 사원이름,hiredate 입사일
+from employee
+where hiredate like '81%';
+
+--10.관리자가 없는 사원의 이름과 담당업무를 출력하세요
+select ename 사원이름, job 담당업무
+from employee
+where manager is null;
+
+--11.커밋션을 받을 수 있는 자격이 되는 사원의 이름,급여,커미션을 출력하되 급여및 커밋션을 기준으로 내림차순 정렬하여 표시하라.
+select ename 사원이름,salary 급여, commission
+from employee
+where commission is not null
+order by commission desc;
+
+--12. 이름이 세번째 문자인 R인 사원의 이름을 표시하시오.
+select ename 사원이름
+from employee
+where instr(ename,'R') = 3;
+
+--13. 이름에 A 와 E 를 모두 포함하고 있는 사원의 이름을 표시하시오.
+select ename 사원이름
+from employee
+where (instr(ename,'A') != 0) and (instr(ename,'E') != 0);
+
+--14. 담당 업무가 사무원(CLERK) 또는 영업사원(SALESMAN)이면서
+--    급여가 $1600, $950, 또는 $1300 이 아닌 사원의 이름, 담당업무, 급여를 출력하시오.
+select ename 사원이름, job 담당업무, salary 급여
+from employee
+where (job = 'CLERK' or job = 'SALESMAN') and ( salary != 1600 or salary != 1300 or salary != 950 ); 
+
+--15. 커미션이 $500이상인 사원의 이름과 급여 및 커미션을 출력하시오.
+select ename 사원이름, salary 급여, commission
+from employee
+where commission >= 500;
+
+
+/*
+ROUND : 특정 자릿수에서 반올림.
+    --양수일때 : 소숫점을 기준으로 오른쪽으로 이동해서 그 뒷자리에서 반올림 < == 주의
+    --음수일때 : 소숫점을 기준으로 왼쪽으로 이동하고 그 자리에서 반올림.
+        --정수를 반올림. 그 뒤는 모두 버림.
+TRUNC : 특정 자릿수에서 잘라냄.
+MOD : 입력받은 수를 나누고 나머지 값만 반환
+*/
+
+select 98.7654 as 원본,
+round(98.7654),
+round(98.7654,2),
+round(98.7654,-1),
+round(98.7654,-2),
+round(98.7654,-3),
+round(98.7654,4)
+from dual;
+
+
+select 12345.789 as 원본,
+round(12345.789),
+round(12345.789,-3),
+round(12345.789,3)
+from dual;
+
+-- TRUNC : 잘라서 버림.   0으로 바꿔버림.
+select 98.7654 as 원본,
+    trunc(98.7654),
+    trunc(98.7654,2),
+    trunc(98.7654,-1)
+from dual;
+
+--eno (사원번호) 가 짝수인 사원만 출력
+select eno, ename
+from employee
+where mod (eno,2) = 0;
+
+/*
+날짜 함수
+    sysdate: 현재 시스템의 날짜와 시간을 출력
+    months_between : 두 날짜 사이의 개월 수를 출력
+    add_montth : 특정 날짜에 개월수를 더할때
+    next_day : 특정날짜에서 최초로 도래하는 인자로 받은 요일
+    last_day : 달의 마지막 날짜를 반환
+    round : 날짜를 반올림 , 15일 이상은 반올림, 15일 민만은 버림.
+    trunc : 날짜를 버림
+
+*/
+--sysdate : 현재 날짜를 출력
+select sysdate
+from dual;
+
+select sysdate -1 as "어제 날짜", sysdate as "오늘 날짜"
+from dual;
+
+select sysdate -1 as 어제날짜, sysdate as 오늘날짜, sysdate +1 as 내일날짜
+from dual;
+
+select hiredate as 입사날짜, hiredate -1, hiredate + 10
+from employee;
+
+
+-- 입사 일에서 현재 까지의 근무일수 구하기
+select round((sysdate - hiredate)) as "총 근무일수"
+from employee;
+
+select round((sysdate - hiredate),2) as "총 근무일수"
+from employee;
+
+--특정 날짜에서 월(Month)를 기준으로 버리기, 월은 출력 하되 날짜는 모두 버림, 01
+select trunc((sysdate - hiredate)) as "총 근무일수"
+from employee;
+
+--특정 날짜에서 월(Month)를 기준으로 반올림 하기, 15일 이상은 반올림, 15일 이하는 버림.
+select hiredate as 원본, trunc (hiredate, 'MONTH')
+from employee;
+
+--month_between(date1,date2) : 두 날짜사이의 개월수를 출력
+
+
+-- 입사일에서 현재까지 몇개월간 근무 했는지 출력.
+select ename, hiredate , months_between( sysdate, hiredate) as 근무개월수
+from employee;
+
+--add_month (date1,개월수) : date1에 개월수를 더해서 출력
+
+--입사후 6개월이 지난 시점을 출력
+select hiredate,add_month ( hiredate, 6)
+from employee;
+
+-- 입사후 100일이 지난 시점의 날짜.
+select hiredate, hiredate + 100 as "입사후 100일시점"
+from employee;
+
+--next_day (date,요일) : date 의 도래하는 요일을 출력
+-- 오늘 날짜에서 도래하는 토요일의 날짜는 몇일 인지 출력.
+select sysdate, next_day(sysdate,'토요일')
+from dual;
+
+--last_day(date) : date 에 월의 마지막 날짜를 출력
+select hiredate, last_day (hiredate) as 월의마지막날짜
+from employee;
+
+/* 형 변환 함수 <== 중요함
+ TO_CHAR : 날짜형 숫자형을 문자형으로 변환하는 함수.
+ TO_DATE : 문자형을 날짜형으로 변환하는 함수.
+ TO_NUMBER : 문자형을 숫자로 변환하는 함수
+*/
+
+--TO_CHAR ( date, 'YYYYMMDD') : 날짜 형식을 'YYYYMMDD' 형식으로 출력시 char 타입으로 변환해서 출력.
+  --YYYY : 년도
+  --MM  : 월
+  --DD  : 일
+  
+  --DAY : 요일의 자세한 정보
+  --DY  : 요일
+
+select ename, hiredate, to_char(hiredate,'YYYYMMDD')
+    ,to_char(hiredate, 'YYYY--MM--DD DY')
+    ,to_char(hiredate, 'YYYY--MM--DD DY HH:MI:SS')
+from employee;
+
+-- 현재 시스템의 오늘 날짜를 출력하되 시간:분:초 요일까지 출력
+select to_char(sysdate, 'YYY--MM--DD DY HH:MI:SS')
+from dual;
+
+
+/* to_char : 숫자를 char 형식으로 변환
+   0: 자릿수를 나타내고 자릿수가 맞지 않으면 0으로 채움.
+   9: 자릿수를 나타내고 자릿수가 맞지 않으면 빈칸으로 채움.
+   L: 각 지역의 통화 기호를 출력
+   . : 소숫점으로 표현
+   , : 천단위 구분자
+   */
+   
+--salary : NUMBER(숫자) ===> char (문자)
+desc employee;
+
+select ename, salary, to_char(salary,'L999,999'), to_char(salary,'L0000,0000')
+from employee;
+
+--to_date ( 'char', 'format') : char (문자) ==> 날짜형식으로 변환.
+--to_date (number , 'format') : 숫자를 ==> 날짜형식으로 변환.
+
+select sysdate, sysdate - to_date(20000101 , 'YYYYMMDD')
+from dual;
+
+
+--두 포멧 방식이 맞지 않아서 오류 발생.
+select sysdate,
+    sysdate - '2000년01월01일'   --날짜 - 문자  < == 두 타입을 맞추어야 한다.
+from dual;
+
+select sysdate,
+    sysdate - to_date('2000-01-01','YYYY-MM-DD')   --날짜 - 문자  < == 두 타입을 맞추어야 한다.
+from dual;
+
+-- 2000년 1월 1일 부터 2022년 2우러 10일까지 지난 날짜 계산하기
+-- '02/10/22'  22년 2월 10일
+select sysdate,
+sysdate - to_date('02/10/22','MM/DD/YY')
+from dual;
+
+select sysdate - to_date(20000101,'YYYYMMDD')
+from dual;
+
+--employee 테이블에서 81년 2월 22일 입사한 사원을 검색하는데 
+    -- '02-22-1981' 문자열 포멧을 data형식으로 변환해서 검색
+select ename 사원이름,to_date(hiredate,'YYYY-MM-DD') 입사일
+from employee
+where hiredate = to_date('02-22-1981','MM-DD-YYYY');
+
+--2000년 12월 25일 부터 오늘까지 총 몇달이 지났는지 출력, 소숫점이하는 모두 잘라내기. sysdate
+
+select trunc(months_between(sysdate,'2000-12-25'))
+from dual;
+
+
+
 
