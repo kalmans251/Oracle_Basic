@@ -512,7 +512,7 @@ where hiredate = to_date('02-22-1981','MM-DD-YYYY');
 
 --2000년 12월 25일 부터 오늘까지 총 몇달이 지났는지 출력, 소숫점이하는 모두 잘라내기. sysdate
 
-select trunc(months_between(sysdate,'2000-12-25'))
+select trunc(months_between(sysdate,to_date('2000/12/25','YYYY/MM/DD')))
 from dual;
 
 
