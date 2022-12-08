@@ -511,10 +511,110 @@ from employee
 where hiredate = to_date('02-22-1981','MM-DD-YYYY');
 
 --2000년 12월 25일 부터 오늘까지 총 몇달이 지났는지 출력, 소숫점이하는 모두 잘라내기. sysdate
-
-select trunc(months_between(sysdate,to_date('2000/12/25','YYYY/MM/DD')))
+select trunc(months_between(sysdate,to_date('20001225','YYYY/MM/DD')))
 from dual;
 
+--문자열 ==> date 타입으로 변환.
+select to_date( '2022-12-7','YYYY-MM-DD')
+from dual;
+
+
+select sysdate,to_char( sysdate,'YYYY MON DD DY')
+from dual;
+
+--숫자를 ==> date 타입으로 변환
+select to_date(20220712,'YYYYMMDD')
+from dual;
+
+select sysdate, to_char(sysdate, 'YYYY-MM-DD HH:MI:SS')
+from dual;
+
+--to_number : 문자형 데이터를 숫자형으로 변환
+
+select 10000 - 5000
+from dual;
+
+
+select '10000' - '5000'
+from dual;
+
+select '10,000' - '5000'  --to_number로 변환필요
+from dual;
+
+select to_number('10,000','99,999') - to_number('5,000','9,999')
+from dual;
+
+--5. 일반함수
+-- nvl(), nvl2(), nullif,
+-- coalesce
+
+-- nvl 함수 : null을 처리하는 함수
+   -- nvl ( 컬럼명 , null대체 값)   : 컬럼에 null이 있을때 대체값으로 변경.
+   
+select ename,salary 월급 ,commission 보너스 , salary*12 + nvl(commission,0) as 총연봉
+from employee;
+
+--nvl2 함수 : null을 처리하는 함수
+   --nvl2 ( 컬럼명 , null이 아닐 경우처리, null일 경우 처리 )
+--nvl2 함수를 사용해서 총 연봉 계산
+select ename, salary 월급, commission 보너스,
+    nvl2(commission,salary*12+commission,salary*12) 총연봉
+from employee;
+
+--nullif 함수 : 두 인자를 비교해서 동일한 경우 null 을 반환하고, 
+    -- 동일하지 않는 경우 첫번째 표현식을 반환.
+    -- nullif (expr1,expr2)
+select nullif('A','A') , nullif('A','B')
+from dual;
+
+-- coalesce 함수
+ --coalesce(expr1,expr2,expr3...expr-n) :
+        -- expr1 null 아니면 expr1반환
+        -- expr1 null , expr2 null 아니면 expr2 반환
+        -- expr1 null , expr2 null ,expr3 null 아니면 expr3 반환
+
+select coalesce('abc','bcd','cde','def','efg')
+from dual;
+
+--decode 함수 : switch case 문과 동일한 함수.
+/*
+    decode( 표현식(컬럼명), 조건1, 결과1,
+                조건2, 결과2,
+                조건3, 결과3,
+                ...
+                기본결과n
+            )
+*/
+-- DNO : 부서번호
+--  10 'ACCOUNTING'
+--  20 'RESEARCH'
+--  30 'SALES'
+--  40 'OPERATION'
+--   'DEFAULT'
+select ename, dno , decode(dno,10,'ACCOUNTIN'
+                            ,20,'RESEARCH'
+                            ,30,'SALES'
+                            ,40,'OPERATION'
+                            ,'DEFAULT'
+                           ) as 부서명
+from employee;
+
+-- case : if ~ else if , else if 와 비슷한 구문
+/*
+        case WHEN 조건1 THEN 결과1
+            WHEN 조건2 THEN 결과2
+            WHEN 조건3 THEN 결과3
+            ELSE 결과n
+        END
+*/
+-- 부서 번호에 대한 부서명 출력 : case
+select ename,dno
+    ,case when dno=10 then 'ACCOUNTING'
+            when dno=20 then 'RESEARCH'
+            when dno=30 then 'SALES'
+            else 'DEFAULT'  
+        end as 부서명
+from employee;
 
 
 
