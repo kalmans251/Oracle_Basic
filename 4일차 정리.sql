@@ -97,7 +97,10 @@ create table member(
     );
 
 rollback;
-/* 제약 조건
+/* 제약 조건 : 데이터의 무결성을 확보 하기 위해서 테이블의 컬럼에 부여.
+        - 무결성 : 오류없는 데이터, 원하는 데이터
+    --not null
+    --Foreign key
     -- Primary Key : 테이블에서 하나만 존재 할 수 있다.
         --primary key 가 적용된 컬럼은 중복된 값을 넣을 수 있다.
         -- 데이터를 수정 할때, 삭제시 조건을 사용하는 컬럼.
@@ -110,6 +113,13 @@ rollback;
     -- check : 값을 넣을때 체크해서 값을 넣는다.
     -- NOT NULL : 컬럼에 NULL을 넣을 수 없다.
 */
+
+show user;
+select * from user_constraints;  --현재 접속한 계정에서 생성된 객체의 모든 제약 조건을 확인.
+
+-- 원하는 테이블의 제약 조건 확인.
+select * from user_constraints
+where table_name = 'EMPLOYEE';
 
 desc member;
 
