@@ -1,6 +1,7 @@
 /*
 View,Index 
 */
+rollback;
 
 show user;
 --View 의 정보를 저장하는 데이터 사전
